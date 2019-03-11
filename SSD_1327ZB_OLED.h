@@ -14,7 +14,6 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MK64F12.h"
-#include "fsl_debug_console.h"
 #include "core_cm4.h"
 
 #include "time.h"
@@ -37,12 +36,25 @@
 #define SSD1327ZB_REMAP_COM                      	0x10
 #define SSD1327ZB_REMAP_ODDEVEN_COM              	0x40
 
-#define SSD1327ZB_bufferLenght						(128*63)
+#define SSD1327ZB_bufferLenght						(128*64)
+
+void SSD1327ZB_init(void);
 
 void SSD1327ZB_sendCommand (uint8_t value);
+void SSD1327ZB_sendData(uint8_t value);
+
+// FOLLOWING NEW FUNCTION TO DRAWING: IMPROVED VELOCITY FOR ANIMATION.
+
+void SSD1327ZB_setBuffer(uint8_t xPos, uint8_t yPos, uint8_t greyScale);
+void SSD1327ZB_setAreaOnScreen (uint8_t xStart,  uint8_t xStop, uint8_t yStart,  uint8_t yStop);
+void SSD1327ZB_drawPartialScreen(uint8_t xStart,  uint8_t xStop, uint8_t yStart,  uint8_t yStop);
+void SSD1327ZB_drawFullScreen();
+
+// FOLLOWING HOLD FUNCTION TO DRAWING...
+
+void SSD1327ZB_drawPixel (uint8_t xPos, uint8_t yPos);
+void SSD1327ZB_drawPicture(uint8_t bitmap[SSD1327ZB_bufferLenght]);
+void SSD1327ZB_clearAllPixel (void);
 void SSD1327ZB_flush (void);
-void SSD1327ZB_clear (void);
-void SSD1327ZB_drawPixel (uint8_t xPos, uint8_t yPos, uint8_t tone);
-void SSD1327ZB_init(void);
 
 #endif /* SSD_1327ZB_OLED_H_ */
