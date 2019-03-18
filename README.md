@@ -23,6 +23,8 @@ Test some basic funcitonality for NXP K64F in FRDM board, without libraries.
 
 - Stepper: drive a little bipolar step-motor with L298N, only set the right sequence of GPIO;
 
+- SPI: AD9833 DDS with 2-wire SPI interface;
+
 - MAIN: for one time, turn on some pixel in OLED 128 x 64, enter in a state machine: 
   1- ADC and DAC, blue led on or off;
   2- UART read-write, spin step-motor. 
