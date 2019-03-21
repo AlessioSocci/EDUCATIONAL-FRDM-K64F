@@ -3,6 +3,10 @@ Educational BARE-METAL Project
 
 Test some basic funcitonality for NXP K64F in FRDM board, without libraries.
 
+
+ATTENTION!! There are many inconsistencies with KL64F data sheet when try to set preemptive priority !! ... and also with 
+KL25Z method to set preemptive! ...but this code seems to work well !!
+
 - GPIO IN / HW Interrupt: set pre-emptive priority (3), enter ISR, turn on red led, wait some ms, turn of led, clear flag,  exit ISR;
 
 - PIT: interrupt with "high" pre-emptive priority (1), time for delay and state machine, increment internal counter every about 1 ms; 
