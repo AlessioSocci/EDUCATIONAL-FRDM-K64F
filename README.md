@@ -21,7 +21,7 @@ KL25Z method to set preemptive! ...but this code seems to work well !!
 
 - UART: set serial for command line interface, read data in ISR with higest pre-emptive priority (0, dafault), write same data in polling;
 
-- I2C: serial sinc-communication with OLED 128 x 64, driver SSD1306. Every write data in ISR with pre-emptive priority (2). It 's strange      but Ack bit from OLED seems good only using ISR !! 
+- I2C: serial sinc-communication with OLED 128 x 64, driver SSD1306. Every write data in ISR with pre-emptive priority (2). It 's strange      but Ack bit from OLED seems good only using ISR !! (...problem is solved adding a little delay before check the ACK!) 
 
 - Parallel 8080: parallel communication with OLED 128 x 128, driver SSD1327Z;
 
