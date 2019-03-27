@@ -29,8 +29,7 @@ KL25Z method to set preemptive! ...but this code seems to work well !!
 
 - SPI: AD9833 DDS with 2-wire SPI interface;
 
-- MAIN: for one time, turn on some pixel in OLED 128 x 64, enter in a state machine: 
-  1- ADC and DAC, blue led on or off;
-  2- UART read-write, spin step-motor. 
+- MAIN: just once, turn on some pixel in OLED 128 x 64 and OLED 128 x 128, draw picture in OLED 128 x 64, ADC and DAC blue led on or off in task1, UART command line read-write, one rotation of step-motor in task2.
+  
 
 
