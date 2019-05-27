@@ -33,7 +33,8 @@
  * @brief   Application entry point.
  */
 
-#include <uart_command_line.h>
+#include <CAN_command_line.h>
+#include <UART_command_line.h>
 #include "time.h"
 #include "picture.h"
 #include "HW_interrupt.h"
@@ -45,7 +46,6 @@
 #include "SSD_1327ZB_OLED.h"
 #include "stepper.h"
 #include "AD9833.h"
-#include "CAN.h"
 /* TODO: insert other definitions and declarations here. */
 
 // ADC
@@ -84,8 +84,8 @@ int main(void)
     // PIT
     pit_init();
 
-    // I2C --- OLED 128x64
-	SSD1306_init(57600);
+    // I2C --- Raystar OLED 128x64
+	SSD1306_init(115200);
 
 	// Parallel 8080 --- Raystar OLED 128x128
 	SSD1327ZB_init();
@@ -99,8 +99,8 @@ int main(void)
 	// PWM
 	pwm_init();
 
-	// UART --- command line interface with FTDI chip
-	uart_init();
+	// UART --- command line interface with UART-USB converter (FTDI chip)
+	UART_init();
 
 	// SPI --- DDS AD5932
 	AD9833_init(9600);
@@ -111,16 +111,15 @@ int main(void)
 	// LPTMR
 	LPTMR0_init();
 
-	// CAN bus
-//	CAN_init(inactivate_codeType);
+	// CAN --- command line interface with transceiver and CAN-USB converter
+	CAN_init();
 
 	/* Force the counter to be placed into memory. */
     int i = 0;
+
     /* Enter an infinite loop, just incrementing a counter. */
     while(1)
     {
-//    	CAN_writeTX_MB(1, 0x2, 0x5, 0x5, 1, inactivate_codeType);
-
     	if (i==0) // test 128 x 64 display by drawing some pixel
     	{
     		delay(50);
@@ -135,7 +134,7 @@ int main(void)
 
     	if (i==1) // Waveform out from DDS
     	{
-    		AD9833_setting(FREQ0, 1000, 0, TRI);
+    		AD9833_setting(FREQ0, 1000, 0, SIN);
     	}
 
     	if (i==2) // test 128 x 128 display by drawing some pixel in "velocity mode" and "classic mode"
@@ -180,7 +179,7 @@ int main(void)
         	task2Flag = 0;
 
         	UART_get (&UARTdataIn);
-        	runStepper (1, 2);
+//        	runStepper (1, 2);
         	UART_send (UARTdataIn);
 
         }
