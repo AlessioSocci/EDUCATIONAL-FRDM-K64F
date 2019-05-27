@@ -9,7 +9,6 @@
 
 // OLED 128 x 64 Driver SSD1306
 uint8_t SSD1306_buffer [SSD1306_bufferLenght];
-uint8_t SSD1306_state = 0;
 uint8_t SSD1306_data = 0;
 
 uint8_t SSD1306_xPosition = 0;
@@ -19,9 +18,19 @@ static uint16_t icrTab[] = {20, 22, 24, 26, 28, 30, 34, 40, 28, 32, 36, 40, 44, 
 	144, 160, 192, 240, 160, 192, 224, 256, 288, 320, 384, 480, 320, 384, 448, 512, 576, 640, 768, 960, 640, 768, 896, 1024, 1152, 1280, 1536,
 	1920, 1280, 1536,  1792, 2048, 2304, 2560, 3072, 3840};
 
+typedef enum _SSD1306_state
+{
+	init,
+	setPosition,
+	flush,
+	flush2,
+}SSD1306_state;
+
+SSD1306_state SSD1306state;
+
 void I2C0_IRQHandler(void)
 {
-	if (SSD1306_state == 1)
+	if (SSD1306state == setPosition)
 	{
 		if((I2C0->S & (1 << 0)) == 0) // wait to receive ack from slave device
 		{
@@ -60,7 +69,7 @@ void I2C0_IRQHandler(void)
 		}
 	}
 
-	if (SSD1306_state == 2)
+	if (SSD1306state == flush)
 	{
 		if((I2C0->S & (1 << 0)) == 0) // wait to receive ack from slave device
 		{
@@ -81,102 +90,134 @@ void I2C0_IRQHandler(void)
 	}
 
 
-	if (SSD1306_state == 10)
+	if (SSD1306state == init)
 	{
 		if((I2C0->S & (1 << 0)) == 0) // wait to receive ack from slave device
 		{
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_DISPLAYOFF; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_SETMUXRATIO; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = 0x3F; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_SETDISPLAYOFFSET; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = 0x00; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_SETDISPLAYSTARTLINE; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_SETADDRESSINGMODE; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = 0x00; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_SETCONTRAST; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = 0xFF; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_DISPLAYNORMAL; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_CHARGEPUMP; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendMoreThanOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = 0x14; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_sendOneCommand;
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->D = SSD1306_DISPLAYON; // Send Instruction
 			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
-//			I2C0->D = SSD1306_sendOneCommand;
+//			I2C0->D = SSD1306_sendOneCommand; // use full to test display the first time...
 //			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 //
 //			I2C0->D = SSD1306_DISPLAYALLON; // Send Instruction
 //			while((I2C0->S & (1 << 7)) == 0); // wait transfer complete
 
+			delay(5);
 			I2C0->C1 &= ~((1 << 5) | (1 << 4)); // Stop
 			I2C0->S |= (1 << 1); // Clear the interrupt flag
+
+			NVIC->IP[24] = (1 << 4); // change Preemptive Priority (1), now in I2C operation PIT ISR no longer interferes
+
 		}
 		else
 		{
@@ -185,7 +226,7 @@ void I2C0_IRQHandler(void)
 		}
 	}
 
-	if (SSD1306_state == 20)
+	if (SSD1306state == flush2)
 	{
 		if((I2C0->S & (1 << 0)) == 0) // wait to receive ack from slave device
 		{
@@ -221,16 +262,16 @@ void I2C0_IRQHandler(void)
 	}
 }
 
-void I2C_sendStart(uint8_t SSD1306_stateSelect)
+void I2C_sendStart(SSD1306_state state)
 {
-	SSD1306_state = SSD1306_stateSelect;
+	SSD1306state = state;
 
-	delay (10);
+	delay (5);
 
 	I2C0->C1 |= (1 << 5) | (1 << 4); // Start
 	I2C0->D = 0x3C << 1; // Send Slave Address 0x3C << 1
 
-	uint32_t timeOut = ticks + 100;
+	uint32_t timeOut = ticks + 300;
 	while (timeOut > ticks && (I2C0->S & (1 << 7)) == 0 ); // wait transfer complete
 }
 
@@ -238,7 +279,7 @@ void SSD1306_flush (void)
 {
 	delay(50);
 
-	I2C_sendStart(20);
+	I2C_sendStart(flush2);
 }
 
 void SSD1306_clearAllPixel(void)
@@ -272,11 +313,11 @@ void SSD1306_drawPixel2 (uint8_t xPos, uint8_t yPos)
 
 	delay(50);
 
-	I2C_sendStart(1);
+	I2C_sendStart(setPosition);
 
 	delay(50);
 
-	I2C_sendStart(2);
+	I2C_sendStart(flush);
 }
 
 
@@ -294,12 +335,12 @@ void SSD1306_init(uint32_t inputBaudRate)
 {
 	// I2C (OLED 128x64 driver SSD1306)
 
-	delay(100);
+	delay(200);
 
 	PORTB->PCR[2] |= (1 << 9); // I2C SCL (alt2 mode)
 	PORTB->PCR[3] |= (1 << 9); // I2C SDA (alt2 mode)
 
-	NVIC->IP[24] = (1 << 4); // Preemptive Priority (1) same that PIT, in I2C transfer operation PIT ISR (every 1 ms !!) must not interfere
+	NVIC->IP[24] = (1 << 5); // Preemptive Priority (2), for "init" state, one less than PIT to allow usage of delay into ISR
 
 	SIM->SCGC4 |= (1 << 6); // CLock on I2C0 Module
 
@@ -323,7 +364,7 @@ void SSD1306_init(uint32_t inputBaudRate)
 
 		else if(newError > oldError)
 		{
-			// wrong inputBaudRate
+			// wrong inputBaudRate, fix this blocking state !
 		}
 	}
 
@@ -331,15 +372,13 @@ void SSD1306_init(uint32_t inputBaudRate)
 
 	I2C0->F = regValue; // Set Baud Rate
 
-//	I2C0->F = 0b00110000; // Set Baud Rate
-
 	I2C0->C1 |= (1 << 7) | (1 << 6) | (1 << 5) | (1 << 4); // I2C0 Enable, Interrupt Enable, Master Mode, TX Mode
 
 	NVIC->ISER[0] |= (1 << 24);
 
 	delay (100);
 
-	I2C_sendStart(10);
+	I2C_sendStart(init);
 
 	delay (100);
 

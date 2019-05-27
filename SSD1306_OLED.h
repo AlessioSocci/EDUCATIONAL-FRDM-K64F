@@ -49,6 +49,7 @@
 #define SSD1306_sendOneData 						0x40
 #define SSD1306_sendMoreThanOneData					0xC0
 
+
 void SSD1306_flush (void);
 void SSD1306_clearAllPixel(void);
 void SSD1306_drawPixel (uint8_t xPos, uint8_t yPos);
