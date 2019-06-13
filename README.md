@@ -28,7 +28,9 @@ ATTENTION!! There are many inconsistencies with KL64F data sheet to set preempti
 
 - SPI: AD9833 DDS with 2-wire SPI interface;
 
-- MAIN: just once, turn on some pixel in OLED 128 x 64 and OLED 128 x 128, draw picture in OLED 128 x 64, ADC and DAC blue led on or off in task1, UART command line read-write, one rotation of step-motor in task2.
+- FlexCAN: transit some frame to CAN-USB Converter, by SN65HVD230 transceiver (only TX from M4 to cli is operative... work in progress)
+
+- MAIN: send some frame of CAN bus to a command line, just once, turn on some pixel in OLED 128 x 64 and OLED 128 x 128, draw picture in OLED 128 x 64, ADC and DAC blue led on or off in task1, UART command line read-write, one rotation of step-motor in task2.
   
 
 
