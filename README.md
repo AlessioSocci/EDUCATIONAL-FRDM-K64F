@@ -1,8 +1,7 @@
 # FRDM-K64F
 Educational BARE-METAL Project 
 
-Test some basic funcitonality for NXP K64F in FRDM board, without libraries.
-
+Test some basic functionality for NXP K64F in FRDM board, without libraries.
 
 ATTENTION!! There are many inconsistencies with KL64F data sheet to set preemptive priority !! ... this code seems to work well !!
 
