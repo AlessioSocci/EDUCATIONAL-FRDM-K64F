@@ -1,9 +1,9 @@
 # FRDM-K64F
-Educational BARE-METAL Project 
+Soft Real Time O.S. with Task Non-Preemptive First Come First Served Scheduling "Educational" Project - NXP ARM Cortex M4F
 
 Test some basic functionality for NXP K64F in FRDM board, without libraries.
 
-ATTENTION!! There are many inconsistencies with KL64F data sheet to set preemptive priority !! ... this code seems to work well !!
+ATTENTION!! There are many inconsistencies with K64F data sheet to set preemptive priority !! ... this code seems to work well !!
 
 - GPIO IN / HW Interrupt: set pre-emptive priority (3), enter ISR, turn on red led, wait some ms, turn of led, clear flag,  exit ISR;
 
